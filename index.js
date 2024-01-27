@@ -9,6 +9,10 @@ const { io } = require('socket.io-client');
 
 const { getObjects } = require('./libraries/utils');
 
+const debug = (msg) => {
+    if (!process.env.DEBUG) return;
+    console.log(msg)
+};
 let monitorsList = {}
 
 // Kerner API Instance
@@ -21,6 +25,7 @@ const kener = axios.create({
     }
 });
 const updateStatus = (heart, tag, maxPing) => {
+    debug('Start kenet monitor update')
     kener.post('/api/status', {
         "status": ((heart.status === 1) ? ((heart.ping  > parseInt(maxPing)) ? 'DEGRADED' : 'UP') : 'DOWN'),
         "latency": heart.ping,
@@ -32,10 +37,12 @@ const updateStatus = (heart, tag, maxPing) => {
 
         })
         .catch(function (error) {
-            console.log(error);
+            debug(error)
         });
 };
 // Uptime Kuma Socket.io
+debug(`Kuma url: ${process.env.KUMA_URL}`);
+debug(`Kener url: ${process.env.KENER_URL}`);
 const kuma = io(process.env.KUMA_URL);
 
 kuma.on("connect", () => {
