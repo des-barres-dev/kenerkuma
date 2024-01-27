@@ -43,7 +43,7 @@ const updateStatus = (heart, tag, maxPing) => {
 // Uptime Kuma Socket.io
 debug(`Kuma url: ${process.env.KUMA_URL}`);
 debug(`Kener url: ${process.env.KENER_URL}`);
-const kuma = io(process.env.KUMA_URL);
+const kuma = io(process.env.KUMA_URL, { transports: ['websocket'] });
 
 kuma.on("connect", () => {
   console.log('connected')
