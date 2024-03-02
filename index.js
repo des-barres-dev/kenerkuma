@@ -35,7 +35,7 @@ const updateStatus = (heart, tag, maxPing) => {
     kener.post('/api/status', {
         "status": ((heart.status === 1) ? ((heart.ping  > parseInt(maxPing)) ? 'DEGRADED' : 'UP') : 'DOWN'),
         "latency": heart.ping || 0,
-        "timestampInSeconds": (Date.now() / 1000),
+        "timestampInSeconds": Math.round(Date.now() / 1000),
         "tag": tag
     })
         .then(function (response) {
